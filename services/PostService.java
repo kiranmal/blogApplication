@@ -13,7 +13,7 @@ public interface PostService {
 	//update
 	
 	
-	Post updatePost(PostDto postDto,Integer postId);
+	PostDto updatePost(PostDto postDto,Integer postId);
 	//delete
 	
 	void deletePost(Integer postId);
@@ -23,11 +23,13 @@ public interface PostService {
 	//getsinglepost
 	
 	
-	Post getPostById(Integer postId);
+	PostDto getPostById(Integer postId);
 	
 	
 	//getallpost
-	List<Post> getAllPost();
+	
+	
+	List<PostDto> getAllPost();
 	
 	//get all post by category
 	

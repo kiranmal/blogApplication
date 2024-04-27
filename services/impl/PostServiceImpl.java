@@ -5,6 +5,7 @@ package com.kiran.blog.services.impl;
 
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
@@ -53,27 +54,40 @@ public class PostServiceImpl implements PostService {
 	}
 
 	@Override
-	public Post updatePost(PostDto postDto, Integer postId) {
-		// TODO Auto-generated method stub
-		return null;
+	public PostDto updatePost(PostDto postDto, Integer postId) {
+	Post post=this.postRepo.findById(postId)
+			.orElseThrow(()->new ResourceNotFoundException("Post", "Post id", postId));
+	post.setTitle(postDto.getTitle());
+	post.setContent(post.getContent());
+	post.setImageName(postDto.getImageName());
+	Post updatedPost=this.postRepo.save(post);
+	
+		return this.modelMapper.map(updatedPost,PostDto.class);
 	}
 
 	@Override
 	public void deletePost(Integer postId) {
-		// TODO Auto-generated method stub
+		Post post=this.postRepo.findById(postId)
+				.orElseThrow(()-> new ResourceNotFoundException("Post", "post id", postId));
+		
+		
 
 	}
 
 	@Override
-	public Post getPostById(Integer postId) {
-		// TODO Auto-generated method stub
-		return null;
+	public PostDto getPostById(Integer postId) {
+		Post post = this.postRepo.findById(postId)
+		.orElseThrow(()->new ResourceNotFoundException("Post", "Post Id", postId));
+		return this.modelMapper.map(post,PostDto.class);
 	}
 
 	@Override
-	public List<Post> getAllPost() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<PostDto> getAllPost() {
+		//for getting all posts
+		List<Post> allPosts = this.postRepo.findAll();
+		List<PostDto> postDtos = allPosts.stream().map((post)-> this.modelMapper.map(post, PostDto.class))
+		.collect(Collectors.toList());
+		return postDtos;
 	}
 
 	@Override
